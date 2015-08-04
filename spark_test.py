@@ -19,11 +19,11 @@ pyspark_dir = os.path.realpath(os.path.abspath(os.path.join(spark_home_dir, "./p
 sys.path.append(pyspark_dir)
 
 ### Setup the scode directory
-scode_dir = os.path.realpath(os.path.abspath(os.path.join(curr_dir, "../models/lstm/scode")))
+scode_dir = os.path.realpath(os.path.abspath(os.path.join(curr_dir, "../IdeaNets/models/lstm/scode")))
 sys.path.append(scode_dir)
 
 ### Setup the Synapsify directory
-synapsify_dir = os.path.realpath(os.path.abspath(os.path.join(curr_dir, "../../Synapsify")))
+synapsify_dir = os.path.realpath(os.path.abspath(os.path.join(curr_dir, "../Synapsify")))
 sys.path.append(synapsify_dir)
 
 ### from load_params import Load_LSTM_Params
@@ -65,6 +65,7 @@ def lstm_test(path, content):
   params['raw_rows'] = content  ### Update the lstm
   params['train_size'] = train_size
   params['test_size'] = test_size
+  params['class_type'] =  "Sentiment"
 
   run_lstm = lstm(params=params)
   run_lstm.build_model()
