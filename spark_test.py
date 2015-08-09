@@ -9,7 +9,7 @@ from StringIO import StringIO
 curr_dir = os.path.split(inspect.getfile(inspect.currentframe()))[0]
 
 ### Setup the environment variables
-spark_home_dir = os.path.realpath(os.path.abspath(os.path.join(curr_dir, "../../../../AWS_Tutorial/spark-1.4.0/")))
+spark_home_dir = os.path.realpath(os.path.abspath(os.path.join(curr_dir, "/root/spark/")))
 python_dir = os.path.realpath(os.path.abspath(os.path.join(spark_home_dir, "./python")))
 os.environ["SPARK_HOME"] = spark_home_dir
 os.environ["PYTHONPATH"] = python_dir
@@ -35,8 +35,8 @@ from pyspark import SparkConf, SparkContext
 ### myfunc is to print the frist row for testing purpose.
 def myfunc(path, content):
   ### Convert the string to the file object, and we need to import StringIO in the code.
-  data = StringIO(content)    
-  
+  data = StringIO(content)
+
   cr = csv.reader(data)
   num_lines = sum(1 for line in cr)
   num_instances = num_lines - 1   ### The first line shouldn't be considered.
@@ -77,10 +77,10 @@ def main():
   ### Initialize the SparkConf and SparkContext
 
   ### Locations of Python files.
-  sheets_loc = '/home/ying/Deep_Learning/Synapsify/Synapsify/loadCleanly/sheets.py'
-  lstm_class_loc = '/home/ying/Deep_Learning/IdeaNets/IdeaNets/models/lstm/scode/lstm_class.py'
-  load_params_loc = '/home/ying/Deep_Learning/IdeaNets/IdeaNets/models/lstm/scode/load_params.py'
-  preprocess_loc = '/home/ying/Deep_Learning/IdeaNets/IdeaNets/models/lstm/scode/synapsify_preprocess.py'
+  sheets_loc = '/root/IdeaNets/Synapsify/Synapsify/loadCleanly/sheets.py'
+  lstm_class_loc = '/root/IdeaNets/IdeaNets/models/lstm/scode/lstm_class.py'
+  load_params_loc = '/root/IdeaNets/IdeaNets/models/lstm/scode/load_params.py'
+  preprocess_loc = '/root/IdeaNets/IdeaNets/models/lstm/scode/synapsify_preprocess.py'
 
   ### Pass Python files to Spark.
   pyFiles = []
@@ -91,14 +91,14 @@ def main():
 
 
   ### Initialize the spark configuration.
-  conf = SparkConf().setAppName("ruofan").setMaster("local")
+  conf = SparkConf().setAppName("ruofan").setMaster("spark://ec2-54-165-83-186.compute-1.amazonaws.com:7077")
   sc = SparkContext(conf = conf, pyFiles=pyFiles)
 
   ### Add non-python files passing to Spark.
-  sc.addFile('/home/ying//AWS_Tutorial/spark-1.4.0/bin/en.zip')
-  sc.addFile('/home/ying/Deep_Learning/IdeaNets/IdeaNets/models/lstm/scode/tokenizer.perl')
-  sc.addFile('/home/ying/Deep_Learning/Synapsify/Synapsify/loadCleanly/stopwords.txt')
-  sc.addFile('/home/ying/Deep_Learning/Synapsify/Synapsify/loadCleanly/prepositions.txt')
+  sc.addFile('/root/spark/bin/nonbreaking_prefix.en')
+  sc.addFile('/root/IdeaNets/IdeaNets/models/lstm/scode/tokenizer.perl')
+  sc.addFile('/root/IdeaNets/Synapsify/Synapsify/loadCleanly/stopwords.txt')
+  sc.addFile('/root/IdeaNets/Synapsify/Synapsify/loadCleanly/prepositions.txt')
 
 
   datafile = sc.wholeTextFiles("s3n://synapsify-ruofan/Synapsify_data", use_unicode=False) ### Read data directory from S3 storage.
@@ -108,3 +108,5 @@ def main():
 
 if __name__ == "__main__":
   main()
+                                                                                                                                                                                        50,1          92%
+
