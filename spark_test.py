@@ -90,7 +90,7 @@ def main():
   pyFiles.append(preprocess_loc)
 
   ### Automatically get the master node url from AWS, normally it is fixed.
-  cmd = ['./../spark-1.4.0/ec2/spark-ec2', '-r', 'us-east-1', 'get-master', 'ruofan-cluster']
+  cmd = ['./../../spark/ec2/spark-ec2', '-r', 'us-east-1', 'get-master', 'ruofan-cluster']
   master_url = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].split("\n")[2]
 
   ### Initialize the spark configuration.
