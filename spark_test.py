@@ -108,7 +108,7 @@ def main():
   sc.addFile('/root/IdeaNets/Synapsify/Synapsify/loadCleanly/prepositions.txt')
 
 
-  datafile = sc.wholeTextFiles("s3n://synapsify-ruofan/Synapsify_data", use_unicode=False) ### Read data directory from S3 storage.
+  datafile = sc.wholeTextFiles("s3n://synapsify-lstm/Synapsify_data1", use_unicode=False) ### Read data directory from S3 storage.
 
   ### Sent the application in each of the slave node
   datafile.foreach(lambda (path, content): lstm_test(path, content))
