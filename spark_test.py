@@ -91,7 +91,11 @@ def main():
 
   ### Automatically get the master node url from AWS, normally it is fixed.
   cmd = ['./../../spark/ec2/spark-ec2', '-r', 'us-east-1', 'get-master', 'ruofan-cluster']
-  master_url = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].split("\n")[2]
+  hostname = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].split("\n")[2]	### host name of the master node.
+  master_url = ""
+  master_url += "spark://"
+  master_url += hostname
+  master_url += ":7070"
 
   ### Initialize the spark configuration.
   conf = SparkConf().setAppName("ruofan").setMaster(master_url)
