@@ -11,7 +11,7 @@ def main():
 
 	### Current directory path, and specify the data directory.
 	curr_dir = os.path.split(inspect.getfile(inspect.currentframe()))[0]
-	data_dir = os.path.realpath(os.path.abspath(os.path.join(curr_dir, "../../../Synapsify_data/")))
+	data_dir = os.path.realpath(os.path.abspath(os.path.join(curr_dir, "../../Synapsify_data/")))
 
 	#for filename in nameList:
 	for ff in os.listdir(data_dir):
