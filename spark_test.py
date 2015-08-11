@@ -96,7 +96,7 @@ def main():
   master_url += "spark://"
   master_url += hostname
   master_url += ":7070"
-
+  #print master_url
   ### Initialize the spark configuration.
   conf = SparkConf().setAppName("ruofan").setMaster(master_url)
   sc = SparkContext(conf = conf, pyFiles=pyFiles)
