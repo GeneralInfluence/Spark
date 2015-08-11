@@ -1,4 +1,4 @@
-import os, sys, inspect, csv, math
+import os, sys, inspect, csv, math, subprocess
 from StringIO import StringIO
 
 ### Note: Please set-up the environment variables before running the code:
@@ -89,9 +89,12 @@ def main():
   pyFiles.append(load_params_loc)
   pyFiles.append(preprocess_loc)
 
+  ### Automatically get the master node url from AWS, normally it is fixed.
+  cmd = ['./../spark-1.4.0/ec2/spark-ec2', '-r', 'us-east-1', 'get-master', 'ruofan-cluster']
+  master_url = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].split("\n")[2]
 
   ### Initialize the spark configuration.
-  conf = SparkConf().setAppName("ruofan").setMaster("spark://ec2-54-165-83-186.compute-1.amazonaws.com:7077")
+  conf = SparkConf().setAppName("ruofan").setMaster(master_url)
   sc = SparkContext(conf = conf, pyFiles=pyFiles)
 
   ### Add non-python files passing to Spark.
