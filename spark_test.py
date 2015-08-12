@@ -1,4 +1,4 @@
-import os, sys, inspect, csv, math
+import os, sys, inspect, csv, math, subprocess
 from StringIO import StringIO
 
 ### Note: Please set-up the environment variables before running the code:
@@ -89,9 +89,16 @@ def main():
   pyFiles.append(load_params_loc)
   pyFiles.append(preprocess_loc)
 
-
+  ### Automatically get the master node url from AWS, normally it is fixed.
+  cmd = ['./../../spark/ec2/spark-ec2', '-r', 'us-east-1', 'get-master', 'ruofan-cluster']
+  hostname = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()[0].split("\n")[2]	### host name of the master node.
+  master_url = ""
+  master_url += "spark://"
+  master_url += hostname
+  master_url += ":7077"
+  #print master_url
   ### Initialize the spark configuration.
-  conf = SparkConf().setAppName("ruofan").setMaster("spark://ec2-54-165-83-186.compute-1.amazonaws.com:7077")
+  conf = SparkConf().setAppName("ruofan").setMaster(master_url)
   sc = SparkContext(conf = conf, pyFiles=pyFiles)
 
   ### Add non-python files passing to Spark.
@@ -101,7 +108,7 @@ def main():
   sc.addFile('/root/IdeaNets/Synapsify/Synapsify/loadCleanly/prepositions.txt')
 
 
-  datafile = sc.wholeTextFiles("s3n://synapsify-ruofan/Synapsify_data", use_unicode=False) ### Read data directory from S3 storage.
+  datafile = sc.wholeTextFiles("s3n://synapsify-lstm/Synapsify_data1", use_unicode=False) ### Read data directory from S3 storage.
 
   ### Sent the application in each of the slave node
   datafile.foreach(lambda (path, content): lstm_test(path, content))
